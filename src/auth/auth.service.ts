@@ -107,7 +107,7 @@ export class AuthService {
     }
     const payload = { email: user.email };
     const token = this.jwtService.sign(payload);
-    const forgetLink = `http://localhost:4000/api/users/forgotPassword?token=${token}`;
+    const forgetLink = `http://localhost:4000/api/auth/forgotPassword?token=${token}`;
     await resetPasswordSendEmail(user, forgetLink);
   }
 
@@ -159,13 +159,13 @@ export class AuthService {
         },
       });
 
-      const link = 'http://localhost:4000/api/users/email/verify/' + token;
+      const link = 'http://localhost:4000/api/auth/email/verify/' + token;
 
       const mailOptions = {
         from: 'startworkapi@email.com', // sender address
         to: user.email, // list of receivers
         subject: 'Subject of your email', // Subject line
-        html: `<b>Hesabınızı aktif etmek için tıklayınız ?</b> <a href="${link}"> Click here to activate your account</a>`, // html body
+        html: `<b></b> <a href="${link}"> Hesabınızı aktif etmek için tıklayınız ? </a>`, // html body
       };
 
       transporter.sendMail(mailOptions, function(err, info) {
@@ -202,7 +202,7 @@ export class AuthService {
         },
       });
 
-      const link = 'http://localhost:4000/api/users/reset/' + token;
+      const link = 'http://localhost:4000/api/auth/reset/' + token;
       const mailOptions = {
         from: 'startworkapi@email.com', // sender address
         to: user.email, // list of receivers
@@ -212,7 +212,7 @@ export class AuthService {
           'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
           'http://' +
-          'localhost:4000/api/users' +
+          'localhost:4000/api/auth' +
           '/reset/' +
           token +
           '\n\n' +

@@ -24,11 +24,11 @@ import { UserEntity } from 'src/entities/user.entity';
 import { IResponse } from 'src/common/interfaces/response.interface';
 import { ResponseSuccess, ResponseError } from 'src/common/dto/response.dto';
 
-@Controller('users')
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Post('/register')
+  @Post('/signup')
   @ApiCreatedResponse({
     description: 'User Registration',
   })
@@ -38,7 +38,7 @@ export class AuthController {
     return this.authService.register(credentials);
   }
 
-  @Post('/login')
+  @Post('/signin')
   @ApiOkResponse({ description: 'User Login' })
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiBody({ type: LoginDto })
@@ -49,12 +49,16 @@ export class AuthController {
   @Get('/email/verify/:token')
   public async verifyEmail(@Param() params): Promise<string> {
     try {
+      
       const isEmailVerified = await this.authService.verifyEmail(params.token);
-      //new ResponseSuccess('LOGIN.EMAIL_VERIFIED', isEmailVerified)
-      const link ="http://localhost:4000/api/users/login"
-      return `<a href="${link}"> Giriş yapmak için tıklayınız</a>`;
+      if(isEmailVerified){
+        const link ="http://localhost:8080/home#/login"
+        return `<a href="${link}"> Giriş yapmak için tıklayınız</a>`;
+      }
+      return "Login Error";
+    
     } catch (error) {
-      // return new ResponseError('LOGIN.ERROR', error);
+     //  return new ResponseError('LOGIN.ERROR', error);
     }
   }
 
