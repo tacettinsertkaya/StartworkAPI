@@ -1,6 +1,6 @@
 export interface ForgottenPassword extends Document {
     email:string;
-    resetPasswordToken: string;
+    newPasswordToken: string;
     timestamp: Date;
   }
   

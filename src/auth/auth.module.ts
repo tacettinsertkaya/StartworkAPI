@@ -8,10 +8,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy} from "./google.strategy"
+import { ProfileService } from 'src/profile/profile.service';
+import { ProfileEntity } from 'src/entities/profile.entity';
+
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity]),
+    TypeOrmModule.forFeature([UserEntity,ProfileEntity]),
     JwtModule.register({
       secret:'thisIsASecretKey',
       signOptions: {
@@ -21,7 +24,7 @@ import { GoogleStrategy} from "./google.strategy"
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService,JwtStrategy,GoogleStrategy],
+  providers: [AuthService,JwtStrategy,GoogleStrategy,ProfileService],
   exports: [PassportModule,JwtStrategy],
 })
 export class AuthModule {}
