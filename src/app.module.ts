@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { typeOrmConfig } from './config/typeOrmConfig';
+import { ProfileModule } from './profile/profile.module';
 
 
 @Module({
@@ -11,6 +12,7 @@ import { typeOrmConfig } from './config/typeOrmConfig';
    
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
+    ProfileModule,
  
   ],
   controllers: [AppController],
