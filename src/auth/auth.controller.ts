@@ -79,11 +79,10 @@ export class AuthController {
     @Body() newPassword: ResetPasswordDto,
     @Param() params,
   ) {
-    const user = await this.authService.verifyToken(params.token, newPassword);
+    const user = await this.authService.verifyToken(params.token, newPassword.newPassword);
     if (!user) {
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
-
     return 'Şifreniz başarılı bir şekilde değiştirildi.!! ';
   }
 
