@@ -117,8 +117,9 @@ export class AuthService {
     }
     const payload = { email: user.email };
     const token = this.jwtService.sign(payload);
-    const forgetLink = `http://localhost:4000/api/auth/forgotPassword?token=${token}`;
-    await resetPasswordSendEmail(user, forgetLink);
+   /// const forgotLink = `http://localhost:4000/api/auth/forgotPassword?token=${token}`;
+   const forgotLink =`http://http://localhost:8080/home#/reset-password`;
+    await resetPasswordSendEmail(user, forgotLink);
   }
 
   googleLogin(req) {
@@ -192,10 +193,10 @@ export class AuthService {
     }
   }
 
-  async sendEmailForgotPassword( email:ForgetPasswordDto ) {
-    const mail ="abrahamsungur@gmail.com";
+  async sendEmailForgotPassword( {email}:ForgetPasswordDto ) {
+   // const mail ="abrahamsungur@gmail.com";
     const user = await this.userRepository.findOne({
-      where: { email:mail },
+      where: { email },
     });
 
     if (!user)
@@ -213,7 +214,7 @@ export class AuthService {
         },
       });
 
-      const link = 'http://http://localhost:8080/home#/reset-password';
+      const link = 'http://localhost:8080/home#/reset-password';
       const mailOptions = {
         from: 'startworkapi@email.com', // sender address
         to: user.email, // list of receivers
@@ -223,7 +224,7 @@ export class AuthService {
           'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
           'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
           'http://' +
-          'localhost:4000/api/auth' +
+          'localhost:8080/home#' +
           '/reset-password/' +
           token +
           '\n\n' +
@@ -251,7 +252,7 @@ export class AuthService {
     await user.save();
   }
 
-  async verifyToken(newPasswordToken:ResetPasswordDto ,newPassword:ResetPasswordDto) {
+  async verifyToken(newPasswordToken:ResetPasswordDto ,newPassword:string) {
     console.log("Verify Token newPassword -------> :",newPassword);
     const user = await this.userRepository.findOne({
       where: { newPasswordToken },
@@ -259,23 +260,20 @@ export class AuthService {
     if (!user) {
       return 'Bu kullanıcı bulunulmadı ?';
     }
-    else{
-      this.setPassword(user.email,newPassword);
-    }
 
-    return user;
+    return this.setPassword(user.email,newPassword);;
   }
 
 
-  async setPassword(email: string, {newPassword}:ResetPasswordDto): Promise<boolean> {
+  async setPassword(email: string, newPassword:string): Promise<string> {
     const userFromDb = await this.userRepository.findOne({ email });
-    if (!userFromDb)
+    if (!userFromDb){
+      return "Kullanıcı bulunulmadı.!"
       throw new HttpException("LOGIN.USER_NOT_FOUND", HttpStatus.NOT_FOUND);
-
+    }
     userFromDb.password = await bcrypt.hash(newPassword, 10);
-    
     await userFromDb.save();
-    return true;
+    return "Şifreniz başarılı bir şekilde değiştirildi"
   }
 
 
