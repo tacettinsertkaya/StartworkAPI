@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { ProfileDto } from 'src/models/profile.model';
 import { SchoolsEntity } from 'src/entities/schools.entity';
+import { CitiesEntity } from 'src/entities/cities.entity';
 
 @Injectable()
 export class ProfileService {
@@ -17,6 +18,11 @@ export class ProfileService {
 
     @InjectRepository(SchoolsEntity)
     private getSchoolsRepository: Repository<SchoolsEntity>,
+
+    @InjectRepository(CitiesEntity)
+    private getCitiesRepository: Repository<CitiesEntity>,
+
+
   ) {}
 
   async getLoginProfile(email: string): Promise<UserEntity> {
@@ -38,5 +44,10 @@ export class ProfileService {
   async getSchools(): Promise<SchoolsEntity[]> {
     const schools = await this.getSchoolsRepository.find();
     return schools;
+  }
+
+  async getCities() : Promise<CitiesEntity[]>{
+    const cities = await this.getCitiesRepository.find();
+    return cities;
   }
 }

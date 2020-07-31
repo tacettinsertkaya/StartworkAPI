@@ -11,11 +11,12 @@ import { GoogleStrategy} from "./google.strategy"
 import { ProfileService } from 'src/profile/profile.service';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { SchoolsEntity } from 'src/entities/schools.entity';
+import { CitiesEntity } from 'src/entities/cities.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity,ProfileEntity,SchoolsEntity]),
+    TypeOrmModule.forFeature([UserEntity,ProfileEntity,SchoolsEntity,CitiesEntity]),
     JwtModule.register({
       secret:'thisIsASecretKey',
       signOptions: {
