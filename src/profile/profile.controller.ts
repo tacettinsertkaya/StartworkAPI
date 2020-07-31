@@ -18,4 +18,7 @@ export class ProfileController {
     console.log('controller register ---> :',credentials);
     return this.profileService.saveProfile(credentials);
   }
+
+
+  
 }
