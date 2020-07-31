@@ -41,7 +41,7 @@ export class AuthService {
     private emailVerification: Repository<EmailVerification>,
     @InjectRepository(UserEntity)
     private forgottenPassword: Repository<ForgottenPassword>,
-    private profileService:ProfileService
+    private profileService: ProfileService,
   ) {}
 
   async register(credentials: RegisterDto) {
@@ -54,13 +54,11 @@ export class AuthService {
       user.newPasswordToken = '';
       await user.save();
       await this.sendEmailVerification(user.email);
-      return "Hesabınız başarılı bir şekilde  oluşturuldu. Size gönderilen   e-postadan hesabınızı aktifleştiriniz!";
+      return 'Hesabınız başarılı bir şekilde  oluşturuldu. Size gönderilen   e-postadan hesabınızı aktifleştiriniz!';
     } catch (err) {
       if (err.code === 'ER_DUP_ENTRY') {
-        return " Hesabınız  oluşturalamadı. Çünkü bu  e-postayla daha önce hesap  açılmıştır.";
-         throw new ConflictException(
-          'Bu  e-posta  daha önce kullanılmıştır.',
-        );
+        return ' Hesabınız  oluşturalamadı. Çünkü bu  e-postayla daha önce hesap  açılmıştır.';
+        throw new ConflictException('Bu  e-posta  daha önce kullanılmıştır.');
       }
       throw new InternalServerErrorException();
     }
@@ -69,11 +67,11 @@ export class AuthService {
   async login({ email, password }: LoginDto) {
     //  try {
     const user = await this.userRepository.findOne({ where: { email } });
-     
+
     if (!user) {
-      return "Email veya şifreniz Yanlış.!"
+      return 'Email veya şifreniz Yanlış.!';
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-    }else{
+    } else {
       this.profileService.getLoginProfile(email);
     }
 
@@ -84,7 +82,7 @@ export class AuthService {
           HttpStatus.FORBIDDEN,
         );
       } catch (error) {
-        return "Size  gönderilen e-postadan hesabınızı aktifleştiriniz!"
+        return 'Size  gönderilen e-postadan hesabınızı aktifleştiriniz!';
         throw new HttpException(
           'Size  gönderilen e-postadan hesabınızı aktifleştiriniz!',
           HttpStatus.FORBIDDEN,
@@ -95,7 +93,7 @@ export class AuthService {
     const isValid = await user.comparePassword(password);
     console.log('valid : ', isValid);
     if (!isValid) {
-      return "Email veya şifreniz Yanlış.!";
+      return 'Email veya şifreniz Yanlış.!';
       throw new UnauthorizedException('Email veya şifreniz Yanlış.!');
     }
     const payload = { email: user.email };
@@ -117,8 +115,8 @@ export class AuthService {
     }
     const payload = { email: user.email };
     const token = this.jwtService.sign(payload);
-   /// const forgotLink = `http://localhost:4000/api/auth/forgotPassword?token=${token}`;
-   const forgotLink =`http://http://localhost:8080/home#/reset-password`;
+    /// const forgotLink = `http://localhost:4000/api/auth/forgotPassword?token=${token}`;
+    const forgotLink = `http://http://localhost:8080/home#/reset-password`;
     await resetPasswordSendEmail(user, forgotLink);
   }
 
@@ -175,7 +173,7 @@ export class AuthService {
       const mailOptions = {
         from: 'startworkapi@email.com', // sender address
         to: user.email, // list of receivers
-        subject: 'Subject of your email', // Subject line
+        subject: 'Mail Doğrulama', // Subject line
         html: `<b></b> <a href="${link}"> Hesabınızı aktif etmek için tıklayınız ? </a>`, // html body
       };
 
@@ -193,8 +191,8 @@ export class AuthService {
     }
   }
 
-  async sendEmailForgotPassword( {email}:ForgetPasswordDto ) {
-   // const mail ="abrahamsungur@gmail.com";
+  async sendEmailForgotPassword({ email }: ForgetPasswordDto) {
+    // const mail ="abrahamsungur@gmail.com";
     const user = await this.userRepository.findOne({
       where: { email },
     });
@@ -236,7 +234,7 @@ export class AuthService {
         else console.log('Info ---> :', info);
       });
 
-      return "Size şifre sıfırlama e-postası gönderildi.  Lütfen e-postanızı kontrol ediniz!";
+      return 'Size şifre sıfırlama e-postası gönderildi.  Lütfen e-postanızı kontrol ediniz!';
     } else {
       throw new HttpException(
         'REGISTER.USER_NOT_REGISTERED',
@@ -252,8 +250,8 @@ export class AuthService {
     await user.save();
   }
 
-  async verifyToken(newPasswordToken:ResetPasswordDto ,newPassword:string) {
-    console.log("Verify Token newPassword -------> :",newPassword);
+  async verifyToken(newPasswordToken: ResetPasswordDto, newPassword: string) {
+    console.log('Verify Token newPassword -------> :', newPassword);
     const user = await this.userRepository.findOne({
       where: { newPasswordToken },
     });
@@ -261,48 +259,44 @@ export class AuthService {
       return 'Bu kullanıcı bulunulmadı ?';
     }
 
-    return this.setPassword(user.email,newPassword);;
+    return this.setPassword(user.email, newPassword);
   }
 
-
-  async setPassword(email: string, newPassword:string): Promise<string> {
+  async setPassword(email: string, newPassword: string): Promise<string> {
     const userFromDb = await this.userRepository.findOne({ email });
-    if (!userFromDb){
-      return "Kullanıcı bulunulmadı.!"
-      throw new HttpException("LOGIN.USER_NOT_FOUND", HttpStatus.NOT_FOUND);
+    if (!userFromDb) {
+      return 'Kullanıcı bulunulmadı.!';
+      throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
     userFromDb.password = await bcrypt.hash(newPassword, 10);
     await userFromDb.save();
-    return "Şifreniz başarılı bir şekilde değiştirildi"
+    return 'Şifreniz başarılı bir şekilde değiştirildi';
   }
-
 
   async checkPassword(email: string, password: string) {
     const userFromDb = await this.userRepository.findOne({ email });
     if (!userFromDb)
-      throw new HttpException("LOGIN USER NOT FOUND", HttpStatus.NOT_FOUND);
+      throw new HttpException('LOGIN USER NOT FOUND', HttpStatus.NOT_FOUND);
 
     return await bcrypt.compare(password, userFromDb.password);
   }
 
-  async changePassword(email:string , newPassword:string){
+  async changePassword(email: string, newPassword: string) {
     const user = await this.userRepository.findOne({ email });
     if (!user)
-      throw new HttpException("LOGIN USER NOT FOUND", HttpStatus.NOT_FOUND);
+      throw new HttpException('LOGIN USER NOT FOUND', HttpStatus.NOT_FOUND);
 
     user.password = await bcrypt.hash(newPassword, 10);
-    
+
     await user.save();
     return true;
   }
-
 
   async getForgottenPasswordModel(
     newPasswordToken: string,
   ): Promise<ForgottenPassword> {
     return await this.forgottenPassword.findOne({
-     where:{newPasswordToken}
+      where: { newPasswordToken },
     });
   }
-
 }
