@@ -20,7 +20,6 @@ export class ProfileDto{
     city:string;
 
     @IsString()
-    @IsNotEmpty()
     @ApiProperty({type:String,description:'country'})
     country:string;
 
@@ -46,7 +45,7 @@ export class ProfileDto{
     twitter:string;
 
     @IsString()
-    @ApiProperty({type:String,description:'departmen'})
+    @ApiProperty({type:String,description:'department'})
     department:string;
 
     @IsString()

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ProfileEntity } from 'src/entities/profile.entity';
@@ -6,6 +8,7 @@ import { UserEntity } from 'src/entities/user.entity';
 import { ProfileDto } from 'src/models/profile.model';
 import { SchoolsEntity } from 'src/entities/schools.entity';
 import { CitiesEntity } from 'src/entities/cities.entity';
+import { DepartmentsEntity } from 'src/entities/departments.entity';
 
 @Injectable()
 export class ProfileService {
@@ -22,24 +25,30 @@ export class ProfileService {
     @InjectRepository(CitiesEntity)
     private getCitiesRepository: Repository<CitiesEntity>,
 
+    @InjectRepository(DepartmentsEntity)
+    private getDepartmentsRespository : Repository<DepartmentsEntity>
+
 
   ) {}
 
-  async getLoginProfile(email: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({ where: { email } });
-    const profile = new ProfileEntity();
-    profile.nameSurname = user.name + ' ' + user.surname;
-    profile.createdAt = user.createdAt;
-    profile.email = user.email;
-
-    console.log('login profile ----> : ', profile);
-    return user;
+  async getProfile() {
+    const users = await this.userRepository.find({ relations: ["profile"] });
+     console.log("Users profiles  --->:",users);
+     return users;
   }
 
   async saveProfile(credentails: ProfileDto): Promise<ProfileEntity> {
     const profile = await this.profileRepository.create(credentails);
+    await profile.save();
     return profile;
   }
+
+
+  async updateProfile(credentails: ProfileDto): Promise<ProfileEntity> {
+    const profile = await this.profileRepository.create(credentails);
+    return profile;
+  }
+
 
   async getSchools(): Promise<SchoolsEntity[]> {
     const schools = await this.getSchoolsRepository.find();
@@ -50,4 +59,10 @@ export class ProfileService {
     const cities = await this.getCitiesRepository.find();
     return cities;
   }
+
+  async getDepartments() :Promise<DepartmentsEntity[]>{
+    const departments = await this.getDepartmentsRespository.find();
+    return departments;
+  }
+
 }

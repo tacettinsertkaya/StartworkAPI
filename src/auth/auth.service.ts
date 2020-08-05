@@ -41,17 +41,45 @@ export class AuthService {
     private emailVerification: Repository<EmailVerification>,
     @InjectRepository(UserEntity)
     private forgottenPassword: Repository<ForgottenPassword>,
-    private profileService: ProfileService,
+    
+    @InjectRepository(ProfileEntity)
+    private profileRepository: Repository<ProfileEntity>,
   ) {}
 
   async register(credentials: RegisterDto) {
     try {
-      const user = this.userRepository.create(credentials);
+      const profile = new ProfileEntity();
+      profile.email = credentials.email;
+      profile.nameSurname = credentials.name + ' ' + credentials.surname;
+      profile.createdAt = new Date();
+      profile.username = credentials.email;
+      profile.city = '';
+      profile.country = '';
+      profile.website = '';
+      profile.linkedin = '';
+      profile.twitter = '';
+      profile.department = '';
+      profile.school = '';
+      profile.experience = '';
+      profile.company = '';
+      profile.biography = '';
+      profile.profileTags = [];
+      profile.skill = '';
+      profile.calling = '';
+       this.profileRepository.create(profile);
+       await profile.save();
+
+      let user = new UserEntity();
+      user = this.userRepository.create(credentials);
+       user.profile = profile;
+
       const payload = { email: user.email };
       const token = this.jwtService.sign(payload);
       user.emailToken = token;
       user.verifyEmail = false;
       user.newPasswordToken = '';
+
+      console.log('User --->:', user);
       await user.save();
       await this.sendEmailVerification(user.email);
       return 'Hesabınız başarılı bir şekilde  oluşturuldu. Size gönderilen   e-postadan hesabınızı aktifleştiriniz!';
@@ -60,6 +88,7 @@ export class AuthService {
         return ' Hesabınız  oluşturalamadı. Çünkü bu  e-postayla daha önce hesap  açılmıştır.';
         throw new ConflictException('Bu  e-posta  daha önce kullanılmıştır.');
       }
+      return 'Kullanıcı kayıdı oluşturulmadı.';
       throw new InternalServerErrorException();
     }
   }
@@ -71,8 +100,6 @@ export class AuthService {
     if (!user) {
       return 'Email veya şifreniz Yanlış.!';
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-    } else {
-      this.profileService.getLoginProfile(email);
     }
 
     if (user.verifyEmail === false) {

@@ -12,11 +12,12 @@ import { ProfileService } from 'src/profile/profile.service';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { SchoolsEntity } from 'src/entities/schools.entity';
 import { CitiesEntity } from 'src/entities/cities.entity';
+import { DepartmentsEntity } from 'src/entities/departments.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity,ProfileEntity,SchoolsEntity,CitiesEntity]),
+    TypeOrmModule.forFeature([UserEntity,ProfileEntity,SchoolsEntity,CitiesEntity,DepartmentsEntity]),
     JwtModule.register({
       secret:'thisIsASecretKey',
       signOptions: {

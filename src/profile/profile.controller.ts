@@ -19,6 +19,11 @@ export class ProfileController {
     return this.profileService.saveProfile(credentials);
   }
 
+  @Get("/profile")
+  getProfile(){
+    return this.profileService.getProfile();
+  }
+
   @Get("/schools")
   getSchools(){
     return this.profileService.getSchools();
@@ -29,5 +34,8 @@ export class ProfileController {
     return this.profileService.getCities();
   }
 
-  
+  @Get("/departments")
+  getDepartments(){
+    return this.profileService.getDepartments();
+  }
 }

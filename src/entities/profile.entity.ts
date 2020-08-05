@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Entity, Column, OneToOne } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { UserEntity } from './user.entity';
 
@@ -54,10 +54,10 @@ export class ProfileEntity extends AbstractEntity {
   calling: string;
 
   @OneToOne(
-    type => ProfileEntity,
-    user => user.author,
+    type => UserEntity,
+    user => user.profile,
   ) 
- author:UserEntity
+ user:UserEntity
 
 
 
