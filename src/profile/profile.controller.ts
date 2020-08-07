@@ -9,17 +9,17 @@ export class ProfileController {
   constructor(private profileService: ProfileService) {}
   
 
-  @Post('/saveProfile')
+  @Post('/save-profile')
   @ApiCreatedResponse({
     description: 'Profile Registration',
   })
   @ApiBody({ type: ProfileDto })
-  register(@Body(ValidationPipe) credentials: ProfileDto) {
+  registerProfile(@Body(ValidationPipe) credentials: ProfileDto) {
     console.log('controller register ---> :',credentials);
     return this.profileService.saveProfile(credentials);
   }
 
-  @Get("/profile")
+  @Get("/get-profile")
   getProfile(){
     return this.profileService.getProfile();
   }

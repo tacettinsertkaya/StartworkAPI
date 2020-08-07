@@ -10,14 +10,14 @@ import { JwtStrategy } from './jwt.strategy';
 import { GoogleStrategy} from "./google.strategy"
 import { ProfileService } from 'src/profile/profile.service';
 import { ProfileEntity } from 'src/entities/profile.entity';
-import { SchoolsEntity } from 'src/entities/schools.entity';
-import { CitiesEntity } from 'src/entities/cities.entity';
-import { DepartmentsEntity } from 'src/entities/departments.entity';
+import { UniversityEntity } from 'src/entities/university.entity';
+import { CityEntity } from 'src/entities/city.entity';
+import { DepartmentEntity } from 'src/entities/department.entity';
 
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity,ProfileEntity,SchoolsEntity,CitiesEntity,DepartmentsEntity]),
+    TypeOrmModule.forFeature([UserEntity,ProfileEntity,UniversityEntity,CityEntity,DepartmentEntity]),
     JwtModule.register({
       secret:'thisIsASecretKey',
       signOptions: {

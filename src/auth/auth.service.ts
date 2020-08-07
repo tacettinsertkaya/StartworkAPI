@@ -30,6 +30,9 @@ import { ProfileService } from 'src/profile/profile.service';
 import { strict } from 'assert';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import * as bcrypt from 'bcryptjs';
+import { UniversityEntity } from 'src/entities/university.entity';
+import { CityEntity } from 'src/entities/city.entity';
+import { DepartmentEntity } from 'src/entities/department.entity';
 
 @Injectable()
 export class AuthService {
@@ -41,7 +44,7 @@ export class AuthService {
     private emailVerification: Repository<EmailVerification>,
     @InjectRepository(UserEntity)
     private forgottenPassword: Repository<ForgottenPassword>,
-    
+
     @InjectRepository(ProfileEntity)
     private profileRepository: Repository<ProfileEntity>,
   ) {}
@@ -53,25 +56,20 @@ export class AuthService {
       profile.nameSurname = credentials.name + ' ' + credentials.surname;
       profile.createdAt = new Date();
       profile.username = credentials.email;
-      profile.city = '';
-      profile.country = '';
       profile.website = '';
+      profile.university =new  UniversityEntity();
+      profile.city = new CityEntity();
+      profile.department = new DepartmentEntity();
       profile.linkedin = '';
       profile.twitter = '';
-      profile.department = '';
-      profile.school = '';
-      profile.experience = '';
-      profile.company = '';
       profile.biography = '';
       profile.profileTags = [];
-      profile.skill = '';
-      profile.calling = '';
-       this.profileRepository.create(profile);
-       await profile.save();
+      this.profileRepository.create(profile);
+      await profile.save();
 
       let user = new UserEntity();
       user = this.userRepository.create(credentials);
-       user.profile = profile;
+      user.profile = profile;
 
       const payload = { email: user.email };
       const token = this.jwtService.sign(payload);

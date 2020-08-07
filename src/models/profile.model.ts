@@ -1,5 +1,8 @@
-import { IsString, IsEmail, MinLength, IsNotEmpty } from "class-validator";
+import { IsString, IsEmail, MinLength, IsNotEmpty, IsNumber } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { DepartmentEntity } from "src/entities/department.entity";
+import { UniversityEntity } from "src/entities/university.entity";
+import { CityEntity } from "src/entities/city.entity";
 
 export class ProfileDto{
 
@@ -14,14 +17,13 @@ export class ProfileDto{
     @ApiProperty({type:String,description:"username"})
     username:string;
 
-    @IsString()
-    @IsNotEmpty()
-    @ApiProperty({type:String,description:'city'})
-    city:string;
+  
+    @ApiProperty({type:CityEntity,description:'city'})
+    city:CityEntity;
 
-    @IsString()
-    @ApiProperty({type:String,description:'country'})
-    country:string;
+    @IsNumber()
+    @ApiProperty({type:Number,description:'country'})
+    countryId:number;
 
 
 
@@ -44,22 +46,20 @@ export class ProfileDto{
     @ApiProperty({type:String,description:'twitter'})
     twitter:string;
 
-    @IsString()
-    @ApiProperty({type:String,description:'department'})
-    department:string;
+    @ApiProperty({type:DepartmentEntity,description:'department'})
+    department:DepartmentEntity;
 
-    @IsString()
-    @ApiProperty({type:String,description:'school'})
-    school:string;
+    @ApiProperty({type:UniversityEntity,description:'school'})
+    university:UniversityEntity;
 
-    @IsString()
-    @ApiProperty({type:String,description:'experience'})
-    experience:string;
+    @IsNumber()
+    @ApiProperty({type:Number,description:'experience'})
+    experienceId:number;
 
     
-    @IsString()
-    @ApiProperty({type:String,description:'company'})
-    company:string;
+    @IsNumber()
+    @ApiProperty({type:Number,description:'company'})
+    companyId:number;
 
      
     @IsString()

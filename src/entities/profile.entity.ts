@@ -2,8 +2,11 @@
 import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { UserEntity } from './user.entity';
+import { CityEntity } from './city.entity';
+import { DepartmentEntity } from './department.entity';
+import { UniversityEntity } from './university.entity';
 
-@Entity('profiles')
+@Entity('profile')
 export class ProfileEntity extends AbstractEntity {
   @Column()
   nameSurname: string;
@@ -12,10 +15,7 @@ export class ProfileEntity extends AbstractEntity {
   username: string;
 
   @Column()
-  city: string;
-
-  @Column()
-  country: string;
+  countryId: number;
 
   @Column({ unique: true })
   email: string;
@@ -29,17 +29,12 @@ export class ProfileEntity extends AbstractEntity {
   @Column()
   twitter: string;
 
-  @Column()
-  department: string;
 
   @Column()
-  school: string;
+  experienceId: number;
 
   @Column()
-  experience: string;
-
-  @Column()
-  company: string;
+  companyId: number;
 
   @Column()
   biography: string;
@@ -48,18 +43,41 @@ export class ProfileEntity extends AbstractEntity {
   profileTags: string[];
 
   @Column()
-  skill: string;
+  skillId: number;
 
   @Column()
-  calling: string;
+  callingId: number;
 
+  //user
   @OneToOne(
     type => UserEntity,
     user => user.profile,
-  ) 
- user:UserEntity
+  )
+  user: UserEntity;
 
+  //city
+  @OneToOne(
+    type => CityEntity,
+    city => city.profile,
+  )
+  @JoinColumn()
+  city: CityEntity;
 
+  //department
+  @OneToOne(
+    type => DepartmentEntity,
+    department => department.profile,
+  )
+  @JoinColumn()
+  department: DepartmentEntity;
+
+  // school
+  @OneToOne(
+    type => UniversityEntity,
+    university => university.profile,
+  )
+  @JoinColumn()
+  university: UniversityEntity;
 
 
 }

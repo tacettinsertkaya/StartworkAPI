@@ -6,9 +6,9 @@ import { ProfileEntity } from 'src/entities/profile.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { ProfileDto } from 'src/models/profile.model';
-import { SchoolsEntity } from 'src/entities/schools.entity';
-import { CitiesEntity } from 'src/entities/cities.entity';
-import { DepartmentsEntity } from 'src/entities/departments.entity';
+import { UniversityEntity } from '../entities/university.entity';
+import { CityEntity } from 'src/entities/city.entity';
+import { DepartmentEntity } from 'src/entities/department.entity';
 
 @Injectable()
 export class ProfileService {
@@ -19,22 +19,22 @@ export class ProfileService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
 
-    @InjectRepository(SchoolsEntity)
-    private getSchoolsRepository: Repository<SchoolsEntity>,
+    @InjectRepository(UniversityEntity)
+    private getUniversityRepository: Repository<UniversityEntity>,
 
-    @InjectRepository(CitiesEntity)
-    private getCitiesRepository: Repository<CitiesEntity>,
+    @InjectRepository(CityEntity)
+    private getCityRepository: Repository<CityEntity>,
 
-    @InjectRepository(DepartmentsEntity)
-    private getDepartmentsRespository : Repository<DepartmentsEntity>
+    @InjectRepository(DepartmentEntity)
+    private getDepartmentRespository : Repository<DepartmentEntity>
 
 
   ) {}
 
   async getProfile() {
-    const users = await this.userRepository.find({ relations: ["profile"] });
-     console.log("Users profiles  --->:",users);
-     return users;
+    const email ="abrahamsungur@gmail.com";
+     const profile = await this.profileRepository.find({ where:{email}});
+     return profile;
   }
 
   async saveProfile(credentails: ProfileDto): Promise<ProfileEntity> {
@@ -50,18 +50,18 @@ export class ProfileService {
   }
 
 
-  async getSchools(): Promise<SchoolsEntity[]> {
-    const schools = await this.getSchoolsRepository.find();
+  async getSchools(): Promise<UniversityEntity[]> {
+    const schools = await this.getUniversityRepository.find();
     return schools;
   }
 
-  async getCities() : Promise<CitiesEntity[]>{
-    const cities = await this.getCitiesRepository.find();
+  async getCities() : Promise<CityEntity[]>{
+    const cities = await this.getCityRepository.find();
     return cities;
   }
 
-  async getDepartments() :Promise<DepartmentsEntity[]>{
-    const departments = await this.getDepartmentsRespository.find();
+  async getDepartments() :Promise<DepartmentEntity[]>{
+    const departments = await this.getDepartmentRespository.find();
     return departments;
   }
 
