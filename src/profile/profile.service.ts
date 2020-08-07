@@ -33,7 +33,7 @@ export class ProfileService {
 
   async getProfile() {
     const email ="abrahamsungur@gmail.com";
-     const profile = await this.profileRepository.find({ where:{email}});
+     const profile = await this.profileRepository.findOne({ where:{email},relations:['city','department','university']});
      return profile;
   }
 
