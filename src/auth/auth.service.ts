@@ -61,7 +61,11 @@ export class AuthService {
       profile.city = new CityEntity();
       profile.department = new DepartmentEntity();
       profile.linkedin = '';
+      profile.companyId=0;
       profile.twitter = '';
+      profile.experienceId=0;
+      profile.callingId=0;
+      profile.skillId=0;
       profile.biography = '';
       profile.profileTags = [];
       this.profileRepository.create(profile);
