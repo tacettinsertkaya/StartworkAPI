@@ -1,46 +1,83 @@
-import { Entity, Column } from "typeorm";
-import { AbstractEntity } from "./abstract.entity";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
+import { AbstractEntity } from './abstract.entity';
+import { UserEntity } from './user.entity';
+import { CityEntity } from './city.entity';
+import { DepartmentEntity } from './department.entity';
+import { UniversityEntity } from './university.entity';
+
+@Entity('profile')
+export class ProfileEntity extends AbstractEntity {
+  @Column()
+  nameSurname: string;
+
+  @Column({ unique: true })
+  username: string;
+
+  @Column()
+  countryId: number;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  website: string;
+
+  @Column()
+  linkedin: string;
+
+  @Column()
+  twitter: string;
 
 
-@Entity('profiles')
-export class ProfileEntity extends AbstractEntity{
+  @Column()
+  experienceId: number;
 
-    @Column()
-    nameSurname:string;
+  @Column()
+  companyId: number;
 
-    @Column({ unique: true })
-    username:string;
+  @Column()
+  biography: string;
 
-    @Column()
-    city:string;
+  @Column('simple-array')
+  profileTags: string[];
 
-    @Column()
-    country:string;
+  @Column()
+  skillId: number;
 
-    @Column({unique:true})
-    email:string;
+  @Column()
+  callingId: number;
 
-    @Column()
-    website:string;
+  //user
+  @OneToOne(
+    type => UserEntity,
+    user => user.profile,
+  )
+  user: UserEntity;
 
-    @Column()
-    linkedin:string;
+  //city
+  @OneToOne(
+    type => CityEntity,
+    city => city.profile,
+  )
+  @JoinColumn()
+  city: CityEntity;
 
-    @Column()
-    twitter:string;
+  //department
+  @OneToOne(
+    type => DepartmentEntity,
+    department => department.profile,
+  )
+  @JoinColumn()
+  department: DepartmentEntity;
 
-    @Column()
-    department:string;
+  // school
+  @OneToOne(
+    type => UniversityEntity,
+    university => university.profile,
+  )
+  @JoinColumn()
+  university: UniversityEntity;
 
-    @Column()
-    school:string;
 
-    @Column()
-    experience:string;
-
-    @Column()
-    company:string;
-
-    @Column()
-    biography:string;
 }

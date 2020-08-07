@@ -30,6 +30,9 @@ import { ProfileService } from 'src/profile/profile.service';
 import { strict } from 'assert';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import * as bcrypt from 'bcryptjs';
+import { UniversityEntity } from 'src/entities/university.entity';
+import { CityEntity } from 'src/entities/city.entity';
+import { DepartmentEntity } from 'src/entities/department.entity';
 
 @Injectable()
 export class AuthService {
@@ -41,17 +44,40 @@ export class AuthService {
     private emailVerification: Repository<EmailVerification>,
     @InjectRepository(UserEntity)
     private forgottenPassword: Repository<ForgottenPassword>,
-    private profileService: ProfileService,
+
+    @InjectRepository(ProfileEntity)
+    private profileRepository: Repository<ProfileEntity>,
   ) {}
 
   async register(credentials: RegisterDto) {
     try {
-      const user = this.userRepository.create(credentials);
+      const profile = new ProfileEntity();
+      profile.email = credentials.email;
+      profile.nameSurname = credentials.name + ' ' + credentials.surname;
+      profile.createdAt = new Date();
+      profile.username = credentials.email;
+      profile.website = '';
+      profile.university =new  UniversityEntity();
+      profile.city = new CityEntity();
+      profile.department = new DepartmentEntity();
+      profile.linkedin = '';
+      profile.twitter = '';
+      profile.biography = '';
+      profile.profileTags = [];
+      this.profileRepository.create(profile);
+      await profile.save();
+
+      let user = new UserEntity();
+      user = this.userRepository.create(credentials);
+      user.profile = profile;
+
       const payload = { email: user.email };
       const token = this.jwtService.sign(payload);
       user.emailToken = token;
       user.verifyEmail = false;
       user.newPasswordToken = '';
+
+      console.log('User --->:', user);
       await user.save();
       await this.sendEmailVerification(user.email);
       return 'Hesabınız başarılı bir şekilde  oluşturuldu. Size gönderilen   e-postadan hesabınızı aktifleştiriniz!';
@@ -60,6 +86,7 @@ export class AuthService {
         return ' Hesabınız  oluşturalamadı. Çünkü bu  e-postayla daha önce hesap  açılmıştır.';
         throw new ConflictException('Bu  e-posta  daha önce kullanılmıştır.');
       }
+      return 'Kullanıcı kayıdı oluşturulmadı.';
       throw new InternalServerErrorException();
     }
   }
@@ -71,8 +98,6 @@ export class AuthService {
     if (!user) {
       return 'Email veya şifreniz Yanlış.!';
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-    } else {
-      this.profileService.getLoginProfile(email);
     }
 
     if (user.verifyEmail === false) {

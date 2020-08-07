@@ -4,10 +4,13 @@ import { ProfileController } from './profile.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { UserEntity } from 'src/entities/user.entity';
+import { UniversityEntity } from 'src/entities/university.entity';
+import { CityEntity } from 'src/entities/city.entity';
+import { DepartmentEntity } from 'src/entities/department.entity';
 
 @Module({
   imports:[
-    TypeOrmModule.forFeature([ProfileEntity,UserEntity]),
+    TypeOrmModule.forFeature([ProfileEntity,UserEntity,UniversityEntity,CityEntity,DepartmentEntity]),
   ],
   providers: [ProfileService],
   controllers: [ProfileController]
