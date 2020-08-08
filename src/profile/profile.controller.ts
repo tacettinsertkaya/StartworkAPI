@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Controller, Post, Body,ValidationPipe, Get } from '@nestjs/common';
+import { Controller, Post, Body,ValidationPipe, Get, Param } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { ApiCreatedResponse, ApiBody } from '@nestjs/swagger';
 import { ProfileDto } from 'src/models/profile.model';
@@ -19,14 +19,14 @@ export class ProfileController {
     return this.profileService.saveProfile(credentials);
   }
 
-  @Get("/get-profile")
-  getProfile(){
-    return this.profileService.getProfile();
+  @Get("/get-profile/:userId")
+  getProfile(@Param() params){
+    return this.profileService.getProfile(params);
   }
 
-  @Get("/schools")
-  getSchools(){
-    return this.profileService.getSchools();
+  @Get("/universities")
+  getUniversities(){
+    return this.profileService.getUniversities();
   }
 
   @Get("/cities")

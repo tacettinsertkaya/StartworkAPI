@@ -52,6 +52,7 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiBody({ type: LoginDto })
   login(@Body(ValidationPipe) credentials: LoginDto) {
+    
     return this.authService.login(credentials);
   }
 

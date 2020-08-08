@@ -58,10 +58,6 @@ export class AuthService {
       profile.updatedAt = new Date();
       profile.username = credentials.email;
       profile.website = '';
-     //  profile.university =new  UniversityEntity();
-     // profile.city = new CityEntity();
-     // const department = new DepartmentEntity();
-     // profile.department = department;
       profile.linkedin = '';
       profile.companyId=0;
       profile.twitter = '';
@@ -132,6 +128,7 @@ export class AuthService {
     const payload = { email: user.email };
     console.log('Payload : ', payload);
     const token = this.jwtService.sign(payload);
+   
     console.log('Token : ', token);
     return { ...user.toJSON(), token };
     /*
