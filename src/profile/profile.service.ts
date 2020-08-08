@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -37,10 +37,17 @@ export class ProfileService {
      return profile;
   }
 
-  async saveProfile(credentails: ProfileDto): Promise<ProfileEntity> {
-    const profile = await this.profileRepository.create(credentails);
-    await profile.save();
-    return profile;
+  async saveProfile(credentails: ProfileDto) {
+
+    try{
+      const profile = await this.profileRepository.create(credentails);
+      await profile.save();
+    }catch(err){
+       return "Profil Bilgileri oluşturulamadı?"
+       throw new InternalServerErrorException("Profil Bilgileriniz Güncellenemedi.?",err);
+    }
+   
+    return "Profile Bilgileriniz Başarılı Bir Şekilde Güncellendi";
   }
 
 

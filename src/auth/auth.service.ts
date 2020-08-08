@@ -55,11 +55,13 @@ export class AuthService {
       profile.email = credentials.email;
       profile.nameSurname = credentials.name + ' ' + credentials.surname;
       profile.createdAt = new Date();
+      profile.updatedAt = new Date();
       profile.username = credentials.email;
       profile.website = '';
-      profile.university =new  UniversityEntity();
-      profile.city = new CityEntity();
-      profile.department = new DepartmentEntity();
+     //  profile.university =new  UniversityEntity();
+     // profile.city = new CityEntity();
+     // const department = new DepartmentEntity();
+     // profile.department = department;
       profile.linkedin = '';
       profile.companyId=0;
       profile.twitter = '';
@@ -68,12 +70,14 @@ export class AuthService {
       profile.skillId=0;
       profile.biography = '';
       profile.profileTags = [];
+      console.log("profile ------------>:",profile);
       this.profileRepository.create(profile);
       await profile.save();
 
       let user = new UserEntity();
       user = this.userRepository.create(credentials);
       user.profile = profile;
+      console.log("proefile --->",profile);
 
       const payload = { email: user.email };
       const token = this.jwtService.sign(payload);
