@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { typeOrmConfig } from './config/typeOrmConfig';
 import { ProfileModule } from './profile/profile.module';
+import { MentorModule } from './mentor/mentor.module';
+import { InvestorModule } from './investor/investor.module';
 
 
 @Module({
@@ -13,6 +15,8 @@ import { ProfileModule } from './profile/profile.module';
     TypeOrmModule.forRoot(typeOrmConfig),
     AuthModule,
     ProfileModule,
+    MentorModule,
+    InvestorModule,
  
   ],
   controllers: [AppController],

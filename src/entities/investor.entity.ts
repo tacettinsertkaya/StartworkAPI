@@ -3,8 +3,8 @@ import { AbstractEntity } from './abstract.entity';
 import { Entity, Column, OneToOne } from 'typeorm';
 import { UserEntity } from './user.entity';
 
-@Entity('mentor')
-export class MentorEntity extends AbstractEntity {
+@Entity('investor')
+export class InvestorEntity extends AbstractEntity {
 
   @Column()
   isInvesment: boolean;

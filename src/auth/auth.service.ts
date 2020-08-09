@@ -33,6 +33,8 @@ import * as bcrypt from 'bcryptjs';
 import { UniversityEntity } from 'src/entities/university.entity';
 import { CityEntity } from 'src/entities/city.entity';
 import { DepartmentEntity } from 'src/entities/department.entity';
+import { MentorEntity } from 'src/entities/mentor.entity';
+import { InvestorEntity } from 'src/entities/investor.entity';
 
 @Injectable()
 export class AuthService {
@@ -47,10 +49,17 @@ export class AuthService {
 
     @InjectRepository(ProfileEntity)
     private profileRepository: Repository<ProfileEntity>,
+
+    @InjectRepository(MentorEntity)
+    private mentorRepository:Repository<MentorEntity>,
+    @InjectRepository(InvestorEntity)
+    private investorRepository:Repository<InvestorEntity>
   ) {}
 
   async register(credentials: RegisterDto) {
     try {
+
+      // profile bilgileri
       const profile = new ProfileEntity();
       profile.email = credentials.email;
       profile.nameSurname = credentials.name + ' ' + credentials.surname;
@@ -66,14 +75,44 @@ export class AuthService {
       profile.skillId=0;
       profile.biography = '';
       profile.profileTags = [];
-      console.log("profile ------------>:",profile);
       this.profileRepository.create(profile);
       await profile.save();
+
+      // mentor bilgileri
+      const mentor = new MentorEntity();
+        mentor.isInvesment=false,
+        mentor.portfoyId=0,
+        mentor.isStatus=false,
+        mentor.isSector=false,
+        mentor.destinationSectorId=0,
+        mentor.isInvestmentStep=false,
+        mentor.investmentStepIds=[],
+        mentor.createdAt=new Date(),
+        mentor.updatedAt=new Date()
+      this.mentorRepository.create(mentor);
+      await mentor.save();
+
+      // investor bilgileri
+      const investor = new InvestorEntity();
+      investor.isInvesment=false,
+      investor.portfoyId=0,
+      investor.isStatus=false,
+      investor.isSector=false,
+      investor.destinationSectorId=0,
+      investor.isInvestmentStep=false,
+      investor.investmentStepIds=[],
+      investor.createdAt=new Date(),
+      investor.updatedAt=new Date()
+      this.investorRepository.create(investor);
+      await investor.save();
+
 
       let user = new UserEntity();
       user = this.userRepository.create(credentials);
       user.profile = profile;
-      console.log("proefile --->",profile);
+      user.mentor=mentor;
+      user.investor=investor;
+      
 
       const payload = { email: user.email };
       const token = this.jwtService.sign(payload);
