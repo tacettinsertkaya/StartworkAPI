@@ -238,7 +238,7 @@ export class AuthService {
         },
       });
 
-      const link = 'http://localhost:8080/confirm/' + user.emailToken;
+      const link = 'http://localhost:8080/#/confirm/' + user.emailToken;
 
 
       const mailOptions = {
