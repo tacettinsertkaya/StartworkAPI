@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
 import { ProfileDto } from 'src/models/profile.model';
 import { UniversityEntity } from '../entities/university.entity';
-import { CityEntity } from 'src/entities/city.entity';
+import { CityEntity } from 'src/entities/cities.entity';
 import { DepartmentEntity } from 'src/entities/department.entity';
 
 @Injectable()

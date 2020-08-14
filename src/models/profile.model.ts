@@ -2,7 +2,7 @@ import { IsString, IsEmail, MinLength, IsNotEmpty, IsNumber } from "class-valida
 import { ApiProperty } from "@nestjs/swagger";
 import { DepartmentEntity } from "src/entities/department.entity";
 import { UniversityEntity } from "src/entities/university.entity";
-import { CityEntity } from "src/entities/city.entity";
+import { CityEntity } from "src/entities/cities.entity";
 
 export class ProfileDto{
 

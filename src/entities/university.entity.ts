@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
 import { ProfileEntity } from "./profile.entity";
 
 
-@Entity("university")
+@Entity("universities")
 export class UniversityEntity {
 
     @PrimaryGeneratedColumn()
