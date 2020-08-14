@@ -2,11 +2,11 @@
 import { Entity, Column, OneToOne, JoinColumn } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { UserEntity } from './user.entity';
-import { CityEntity } from './city.entity';
+import { CityEntity } from './cities.entity';
 import { DepartmentEntity } from './department.entity';
 import { UniversityEntity } from './university.entity';
 
-@Entity('profile')
+@Entity('profiles')
 export class ProfileEntity extends AbstractEntity {
   @Column()
   nameSurname: string;

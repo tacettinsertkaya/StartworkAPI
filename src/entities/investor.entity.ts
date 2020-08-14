@@ -3,7 +3,7 @@ import { AbstractEntity } from './abstract.entity';
 import { Entity, Column, OneToOne } from 'typeorm';
 import { UserEntity } from './user.entity';
 
-@Entity('investor')
+@Entity('investors')
 export class InvestorEntity extends AbstractEntity {
 
   @Column()

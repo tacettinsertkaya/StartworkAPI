@@ -10,7 +10,7 @@ import { GoogleStrategy } from './google.strategy';
 import { ProfileService } from 'src/profile/profile.service';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { UniversityEntity } from 'src/entities/university.entity';
-import { CityEntity } from 'src/entities/city.entity';
+import { CityEntity } from 'src/entities/cities.entity';
 import { DepartmentEntity } from 'src/entities/department.entity';
 import { MentorEntity } from 'src/entities/mentor.entity';
 import { InvestorEntity } from 'src/entities/investor.entity';

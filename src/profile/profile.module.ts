@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { UniversityEntity } from 'src/entities/university.entity';
-import { CityEntity } from 'src/entities/city.entity';
+import { CityEntity } from 'src/entities/cities.entity';
 import { DepartmentEntity } from 'src/entities/department.entity';
 
 @Module({

@@ -3,13 +3,15 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne } from "typeorm";
 import { ProfileEntity } from "./profile.entity";
 
 
-@Entity("city")
+@Entity("cities")
 export class CityEntity {
 
     @PrimaryGeneratedColumn()
     id:number;
+
     @Column()
     name:string;
+    
     @Column()
     status:number;
 

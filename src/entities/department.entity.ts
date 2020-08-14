@@ -2,7 +2,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
 import { ProfileEntity } from "./profile.entity";
 
-@Entity("department")
+@Entity("departments")
 export class DepartmentEntity {
 
     @PrimaryGeneratedColumn()

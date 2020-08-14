@@ -31,7 +31,7 @@ import { strict } from 'assert';
 import { ProfileEntity } from 'src/entities/profile.entity';
 import * as bcrypt from 'bcryptjs';
 import { UniversityEntity } from 'src/entities/university.entity';
-import { CityEntity } from 'src/entities/city.entity';
+import { CityEntity } from 'src/entities/cities.entity';
 import { DepartmentEntity } from 'src/entities/department.entity';
 import { MentorEntity } from 'src/entities/mentor.entity';
 import { InvestorEntity } from 'src/entities/investor.entity';
@@ -107,6 +107,7 @@ export class AuthService {
 
       let user = new UserEntity();
       user = this.userRepository.create(credentials);
+      user.createdAt = new Date();
       user.profile = profile;
       user.mentor = mentor;
       user.investor = investor;
@@ -196,10 +197,13 @@ export class AuthService {
     };
   }
 
-  async verifyEmail(token: string): Promise<boolean> {
+  async verifyEmail(token:string): Promise<boolean> {
+    console.log("Gelen token ------->:",token);
     const emailVerif = await this.emailVerification.findOne({
-      where: { emailToken: token },
+      where: { emailToken:token},
     });
+
+    console.log("verifyEmail ---------->:",emailVerif);
 
     if (emailVerif && emailVerif.email) {
       const userFromDb = await this.userRepository.findOne({
@@ -223,7 +227,7 @@ export class AuthService {
   async sendEmailVerification(email: string): Promise<boolean> {
     const user = await this.userRepository.findOne({ where: { email } });
     const payload = { email: user.email };
-    const token = this.jwtService.sign(payload);
+  
 
     if (user) {
       const transporter = nodemailer.createTransport({
@@ -234,7 +238,8 @@ export class AuthService {
         },
       });
 
-      const link = 'http://localhost:8080/confirm/' + token;
+      const link = 'http://localhost:8080/confirm/' + user.emailToken;
+
 
       const mailOptions = {
         from: 'startworkapi@email.com', // sender address
