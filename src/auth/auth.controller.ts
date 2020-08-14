@@ -52,21 +52,19 @@ export class AuthController {
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @ApiBody({ type: LoginDto })
   login(@Body(ValidationPipe) credentials: LoginDto) {
-    
     return this.authService.login(credentials);
   }
 
   @Get('/email/verify/:token')
-  public async verifyEmail(@Param() params): Promise<string> {
+  public async verifyEmail(@Param() params): Promise<boolean> {
     try {
       const isEmailVerified = await this.authService.verifyEmail(params.token);
       if (isEmailVerified) {
-        const link = 'http://localhost:8080/home#/login';
-        return `<a href="${link}"> Giriş yapmak için tıklayınız</a>`;
+        return true;
       }
-      return 'Login Error';
+      return false;
     } catch (error) {
-      //  return new ResponseError('LOGIN.ERROR', error);
+      return false;
     }
   }
 
@@ -81,7 +79,10 @@ export class AuthController {
     @Body() newPassword: ResetPasswordDto,
     @Param() params,
   ) {
-    const user = await this.authService.verifyToken(params.token, newPassword.newPassword);
+    const user = await this.authService.verifyToken(
+      params.token,
+      newPassword.newPassword,
+    );
     if (!user) {
       throw new HttpException('LOGIN.USER_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
@@ -102,7 +103,7 @@ export class AuthController {
         if (isValidPassword) {
           isNewPasswordChanged = await this.authService.changePassword(
             changePassword.email,
-            changePassword.newPassword
+            changePassword.newPassword,
           );
         } else {
           return new ResponseError('CHANGE PASSWORD WRONG CURRENT PASSWORD');
@@ -115,8 +116,6 @@ export class AuthController {
       );
     } catch (error) {}
   }
-
-  
 
   //google ile giris yapma
   @Get('/google')
